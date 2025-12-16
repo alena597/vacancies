@@ -1,0 +1,520 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  margin: 0; /* Зовнішні відступи */
+  background-color: #e0e9f8; 
+  color: #333; /* Основний колір */
+  line-height: 1.6; /* Міжрядковий інтервал */
+}
+
+.container {
+  max-width: 1200px; /* Максимальна ширина контейнера */
+  margin: 0 auto; /* Автоматичні відступи */
+  padding: 0 20px; /* Горизонтальні відступи */
+}
+
+header {
+  background-color: #a0c5ed; 
+  color: white; 
+  padding: 10px 0; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Тінь */
+}
+
+.header-content {
+  display: flex; /* Для розташування елементів */
+  justify-content: space-between; /* Розтягує елементи на всю ширину з простором між ними */
+  align-items: center; /* Вирівнювання елементів по центру по вертикалі */
+}
+
+.logo {
+  height: 50px; 
+  width: auto;
+}
+
+.auth-buttons button {
+  background-color: #32559E; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  margin-left: 10px; 
+  border-radius: 5px; /* Заокруглені кути */
+  cursor: pointer; /* Зміна курсору при наведенні */
+  font-size: 0.9em; 
+  transition: background-color 0.3s ease; /* Плавний перехід кольору фону */
+}
+
+.auth-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* "Вакансії Сумиобленерго" */
+.page-title {
+  text-align: center; 
+  color: #32559E; 
+  margin: 30px 0; 
+  font-size: 2.5em;
+  font-weight: 600;
+}
+
+.search-and-filters-enedis {
+  background-color: #fff; 
+  padding: 30px;
+  border-radius: 10px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Тінь */
+  margin-bottom: 30px; /* Відступ знизу */
+}
+
+/* Форма для пошуку та фільтрів */
+.enedis-search-form {
+  display: flex; 
+  flex-direction: column; /* Розташування елементів у стовпець */
+  gap: 20px; /* Відступ між елементами */
+}
+
+/* Оболонка для поля пошуку та кнопки */
+.search-input-wrapper {
+  display: flex;
+  gap: 10px; 
+}
+
+/* Стилі для поля вводу глобального пошуку */
+.global-search-input {
+  flex-grow: 1; /* Поле займає весь доступний простір */
+  padding: 12px 15px; 
+  border: 1px solid #ddd; 
+  border-radius: 5px; 
+  font-size: 1em; 
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); 
+}
+
+/* Стилі для тексту-підказки в полі пошуку */
+.global-search-input::placeholder {
+  color: #aaa;
+}
+
+.search-button {
+  background-color: #32559E;
+  color: white;
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  cursor: pointer; /* Зміна курсору */
+  font-size: 1em;
+  transition: background-color 0.3s ease; /* Плавний перехід кольору */
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.search-button:hover {
+  background-color: #0056b3; 
+}
+
+/* Стилі для SVG іконки в кнопці пошуку */
+.search-button svg {
+  width: 20px; 
+  height: 20px; 
+  color: white; 
+}
+
+/* Панель з опціями фільтрів */
+.filter-options-bar {
+  display: flex; 
+  flex-wrap: wrap; /* Дозволяє елементам переноситися на наступний рядок */
+  gap: 15px; 
+  justify-content: flex-start; 
+  align-items: center; 
+}
+
+/* Оболонка для кожного випадаючого фільтра */
+.filter-dropdown {
+  position: relative; /* Позиціонування відносно для випадаючого меню */
+  display: inline-block; /* Відображення як вбудований блочний елемент */
+}
+
+/* Кнопка-перемикач для випадаючого меню фільтра */
+.dropdown-toggle {
+  background-color: #f0f0f0; 
+  color: #333;
+  border: 1px solid #ddd; 
+  padding: 10px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 0.95em; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Стилі кнопки-перемикача при наведенні */
+.dropdown-toggle:hover {
+  background-color: #e2e2e2; /* Зміна кольору фону */
+  border-color: #ccc; /* Зміна кольору меж */
+}
+
+/* Стилі для активної кнопки-перемикача */
+.dropdown-toggle.active {
+  background-color: #d0d0d0; 
+  border-color: #bbb; 
+}
+
+/* Іконка стрілки у випадаючих кнопках */
+.dropdown-toggle .arrow-icon {
+  border: solid #333; 
+  border-width: 0 2px 2px 0; 
+  display: inline-block; /* Відображення як вбудований блочний елемент */
+  padding: 3px; 
+  transform: rotate(45deg); /* Поворот для створення стрілки вниз */
+  -webkit-transform: rotate(45deg); /* Для сумісності з WebKit */
+  transition: transform 0.2s ease; 
+}
+
+/* Стилі активної іконки стрілки (повертається вгору) */
+.dropdown-toggle.active .arrow-icon {
+  transform: rotate(-135deg); /* Поворот для створення стрілки вгору */
+  -webkit-transform: rotate(-135deg); /* Для сумісності з WebKit */
+}
+
+/* Випадаюче меню фільтра */
+.dropdown-menu {
+  display: none; 
+  position: absolute; /* Абсолютне позиціонування */
+  background-color: #fff; 
+  min-width: 200px; 
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+  border-radius: 8px; 
+  z-index: 10; /* Розташування над іншими елементами */
+  padding: 10px; 
+  margin-top: 5px;
+  border: 1px solid #eee; 
+}
+
+/* Клас для відображення випадаючого меню */
+.dropdown-menu.show {
+  display: block; 
+}
+
+/* Список чекбоксів у випадаючому меню */
+.checkbox-list {
+  list-style: none; /* Прибираємо маркери списку */
+  padding: 0; 
+  margin: 0; 
+}
+
+/* Елемент списку чекбоксів */
+.checkbox-list li {
+  margin-bottom: 8px; 
+}
+
+/* Мітка для чекбокса */
+.checkbox-list label {
+  display: flex;
+  align-items: center; 
+  font-size: 0.95em; 
+  cursor: pointer; 
+}
+
+/* Стилі для самого чекбокса */
+.checkbox-list input[type="checkbox"] {
+  margin-right: 8px; 
+  accent-color: #32559E; /* Колір галочки */
+}
+
+.btn-validate {
+  background-color: #32559E; 
+  color: white; 
+  border: none; 
+  padding: 8px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 0.9em; 
+  margin-top: 10px; 
+  width: 100%;
+  transition: background-color 0.3s ease; 
+}
+
+.btn-validate:hover {
+  background-color: #0056b3; 
+}
+
+.filter-reset-button {
+  margin-left: auto;
+}
+
+.reset-filters-btn {
+  background-color: #dc3545; 
+  color: white;
+  border: none; 
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.reset-filters-btn:hover {
+  background-color: #c82333; 
+}
+
+/* Іконка "✕" для кнопки скидання */
+.reset-icon {
+  font-size: 1.2em; 
+  line-height: 1; 
+}
+
+.vacancies-section {
+  padding: 30px 0; 
+}
+
+.vacancies-section h2 {
+  text-align: center; 
+  color: #32559E; 
+  margin-bottom: 30px; 
+  font-size: 2em; 
+}
+
+/* Сітка для карток вакансій */
+.vacancies-grid {
+  display: grid; /* Використання CSS Grid */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Автоматичне заповнення колонками, мінімальна ширина 300px */
+  gap: 25px; 
+}
+
+/* Картка окремої вакансії */
+.job-card {
+  background-color: #fff; 
+  padding: 25px;
+  border-radius: 10px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between; 
+  transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.job-card:hover {
+  transform: translateY(-5px); /* Зміщення вгору при наведенні */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); 
+}
+
+.job-card h3 {
+  color: #32559E; 
+  margin-top: 0; 
+  font-size: 1.5em; 
+  margin-bottom: 15px; 
+}
+
+/* рівень, освіта, місто, зарплата */
+.job-card .meta p {
+  margin: 5px 0; 
+  font-size: 0.95em; 
+  color: #555; 
+}
+
+/* Жирний текст */
+.job-card .meta p strong {
+  color: #0056b3; 
+}
+
+.details-button {
+  display: block; /* Блочний елемент */
+  width: 100%; 
+  background-color: #32559E; 
+  color: white; 
+  border: none; 
+  padding: 10px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 1em; 
+  margin-top: 20px; 
+  transition: background-color 0.3s ease; 
+}
+
+.details-button:hover {
+  background-color: #0056b3; 
+}
+
+.pagination {
+  display: flex; 
+  justify-content: center; 
+  gap: 10px; 
+  margin-top: 40px; 
+  flex-wrap: wrap; 
+}
+
+.pagination button {
+  background-color: #32559E; 
+  color: white; 
+  border: none; 
+  padding: 10px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 1em; 
+  transition: background-color 0.3s ease; 
+  min-width: 40px; 
+}
+
+.pagination button:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+/* Стилі для вимкнених кнопок пагінації */
+.pagination button:disabled {
+  background-color: #cccccc; 
+  cursor: not-allowed; 
+  opacity: 0.8; /* Зменшення прозорості */
+}
+
+footer {
+  background-color: #32559E; 
+  color: white; 
+  text-align: center; 
+  padding: 20px 0; 
+  margin-top: 50px; 
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2); 
+}
+
+footer p {
+  margin: 0; 
+  font-size: 0.9em; 
+}
+
+/* Повідомлення про відсутність результатів або помилку */
+.no-results-message, .error-message {
+  text-align: center; 
+  font-size: 1.2em;
+  color: #666; 
+  padding: 50px 0; /
+}
+
+.error-message {
+  color: #dc3545; 
+}
+
+
+@media (max-width: 768px) {
+  /* Елементи розташовуються у стовпець */
+  .header-content {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .auth-buttons {
+      margin-top: 10px;
+  }
+
+  .page-title {
+      font-size: 2em;
+  }
+
+  .search-input-wrapper {
+      flex-direction: column;
+  }
+
+  .search-button {
+      width: 100%;
+  }
+
+  .search-and-filters-enedis {
+      padding: 20px;
+  }
+
+  .filter-options-bar {
+      flex-direction: column; 
+      align-items: stretch; 
+  }
+
+  /* Випадаючий фільтр займає всю ширину */
+  .filter-dropdown {
+      width: 100%; 
+  }
+
+  /* Кнопка-перемикач випадаючого меню */
+  .dropdown-toggle {
+      width: 100%;
+      justify-content: space-between; /* Розтягуємо текст і стрілку */
+  }
+
+  /* Випадаюче меню */
+  .dropdown-menu {
+      position: static; 
+      width: 100%; 
+      box-shadow: none;
+      border: none; 
+      padding: 0; 
+      margin-top: 0; 
+  }
+
+  .selected-filters-section {
+    padding: 15px;
+  }
+
+  .selected-filters-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .selected-filter-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Стилі для секції обраних фільтрів */
+.selected-filters-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+}
+
+.selected-filters-section h2 {
+    color: #32559E;
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.selected-filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.selected-filter-item {
+    background-color: #e0e9f8;
+    color: #32559E;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #a0c5ed;
+}
+
+.selected-filter-item strong {
+    font-weight: 600;
+}
+
+.remove-filter-btn {
+    background: none;
+    border: none;
+    color: #32559E;
+    font-size: 1.2em;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 2px;
+    transition: color 0.2s ease;
+}
+
+.remove-filter-btn:hover {
+    color: #dc3545;
+}
