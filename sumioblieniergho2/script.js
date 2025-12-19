@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Отримуємо посилання на ключові елементи
     const vacanciesContainer = document.getElementById('vacanciesContainer');
     const paginationContainer = document.getElementById('pagination');
     const filterForm = document.getElementById('filterForm');
@@ -11,12 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const vacanciesPerPage = 8;
     let currentPage = 1;
 
-    // Зберігає всі завантажені вакансії
     let allVacancies = [];
-    // Зберігає вакансії після застосування фільтрів
     let filteredVacancies = [];
 
-    // Об'єкт для зберігання активних значень фільтрів
     let activeFilters = {
         department: [],
         level: [],
@@ -25,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
         salary: []
     };
 
-    // Завантаження вакансій з vacancies.php
     async function fetchVacancies() {
         try {
             const response = await fetch('vacancies.php');
@@ -38,7 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Відображення вакансій на поточній сторінці
+    function createMetaItem(label, value) {
+        const p = document.createElement('p');
+        const strong = document.createElement('strong');
+        strong.textContent = label;
+        p.appendChild(strong);
+        p.appendChild(document.createTextNode(' ' + value));
+        return p;
+    }
+
     function renderVacancies(vacs) {
         vacanciesContainer.innerHTML = '';
         const startIndex = (currentPage - 1) * vacanciesPerPage;
@@ -53,34 +56,38 @@ document.addEventListener('DOMContentLoaded', () => {
         vacanciesToDisplay.forEach(vacancy => {
             const jobCard = document.createElement('div');
             jobCard.classList.add('job-card');
-            jobCard.innerHTML = `
-                <h3>${vacancy.title}</h3>
-                <div class="meta">
-                    <p><strong>Рівень:</strong> ${vacancy.level}</p>
-                    <p><strong>Освіта:</strong> ${vacancy.education}</p>
-                    <p><strong>Місто:</strong> ${vacancy.city}</p>
-                    <p><strong>Зарплата:</strong> ${vacancy.sal}</p>
-                </div>
-                <button class="details-button" data-id="${vacancy.id}">Деталі</button>
-            `;
-            vacanciesContainer.appendChild(jobCard);
-        });
 
-        document.querySelectorAll('.details-button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const vacancyId = event.target.dataset.id;
-                window.location.href = `vacancy-details.php?id=${vacancyId}`;
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = vacancy.title;
+
+            const metaEl = document.createElement('div');
+            metaEl.classList.add('meta');
+            metaEl.appendChild(createMetaItem('Рівень:', vacancy.level));
+            metaEl.appendChild(createMetaItem('Освіта:', vacancy.education));
+            metaEl.appendChild(createMetaItem('Місто:', vacancy.city));
+            metaEl.appendChild(createMetaItem('Зарплата:', vacancy.sal));
+
+            const detailsButton = document.createElement('button');
+            detailsButton.classList.add('details-button');
+            detailsButton.textContent = 'Деталі';
+            detailsButton.dataset.id = vacancy.id;
+            detailsButton.addEventListener('click', () => {
+                window.location.href = `vacancy-details.php?id=${vacancy.id}`;
             });
+
+            jobCard.appendChild(titleEl);
+            jobCard.appendChild(metaEl);
+            jobCard.appendChild(detailsButton);
+
+            vacanciesContainer.appendChild(jobCard);
         });
     }
 
-    // Відображення пагінації
     function renderPagination(totalVacancies) {
         paginationContainer.innerHTML = '';
         const totalPages = Math.ceil(totalVacancies / vacanciesPerPage);
         if (totalPages <= 1) return;
 
-        // Кнопка "Попередня"
         const prevButton = document.createElement('button');
         prevButton.textContent = 'Попередня';
         prevButton.disabled = currentPage === 1;
@@ -92,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         paginationContainer.appendChild(prevButton);
 
-        // Кнопки сторінок
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
             pageButton.textContent = i;
@@ -106,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
             paginationContainer.appendChild(pageButton);
         }
 
-        // Кнопка "Наступна"
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Наступна';
         nextButton.disabled = currentPage === totalPages;
@@ -119,13 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(nextButton);
     }
 
-    // Видалення нецифрових символів і перетворення в число
     function parseSalary(salaryStr) {
         if (!salaryStr) return 0;
         return parseInt(salaryStr.replace(/\D/g, ''));
     }
 
-    // Оновлення відображення обраних фільтрів
     function updateSelectedFiltersDisplay() {
         selectedFiltersContainer.innerHTML = '';
         let filtersApplied = false;
@@ -146,74 +149,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 filtersApplied = true;
                 const filterDisplayName = getFilterDisplayName(type);
                 const values = activeFilters[type].join(', ');
+
                 const filterItem = document.createElement('div');
                 filterItem.classList.add('selected-filter-item');
-                filterItem.innerHTML = `
-                    <strong>${filterDisplayName}:</strong> ${values}
-                    <button class="remove-filter-btn" data-filter-type="${type}" data-filter-value="${values}">✕</button>
-                `;
+                const strong = document.createElement('strong');
+                strong.textContent = filterDisplayName + ': ';
+                filterItem.appendChild(strong);
+                filterItem.appendChild(document.createTextNode(values));
+
+                const removeBtn = document.createElement('button');
+                removeBtn.classList.add('remove-filter-btn');
+                removeBtn.dataset.filterType = type;
+                removeBtn.textContent = '✕';
+                removeBtn.addEventListener('click', () => {
+                    activeFilters[type] = [];
+                    document.querySelectorAll(`input[name="${type}"]`).forEach(cb => cb.checked = false);
+                    applyFiltersAndRender();
+                });
+
+                filterItem.appendChild(removeBtn);
                 selectedFiltersContainer.appendChild(filterItem);
             }
         }
 
-        if (filtersApplied || globalSearchInput.value.trim() !== '') {
-            selectedFiltersSection.style.display = 'block';
-        } else {
-            selectedFiltersSection.style.display = 'none';
-        }
-
-        // Обробники кнопок видалення фільтрів
-        document.querySelectorAll('.remove-filter-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const filterType = event.target.dataset.filterType;
-                const checkboxes = document.querySelectorAll(`input[name="${filterType}"]`);
-
-                activeFilters[filterType].forEach(activeVal => {
-                    checkboxes.forEach(checkbox => {
-                        if (checkbox.value === activeVal) {
-                            checkbox.checked = false;
-                        }
-                    });
-                });
-
-                activeFilters[filterType] = [];
-                if (filterType === 'globalSearch' && globalSearchInput.value.trim() !== '') {
-                    globalSearchInput.value = '';
-                }
-
-                applyFiltersAndRender();
-            });
-        });
-
-        // Глобальний пошук
         if (globalSearchInput.value.trim() !== '') {
             filtersApplied = true;
             const searchItem = document.createElement('div');
             searchItem.classList.add('selected-filter-item');
-            searchItem.innerHTML = `
-                <strong>Пошук:</strong> ${globalSearchInput.value.trim()}
-                <button class="remove-filter-btn" data-filter-type="globalSearch">✕</button>
-            `;
+            const strong = document.createElement('strong');
+            strong.textContent = 'Пошук: ';
+            searchItem.appendChild(strong);
+            searchItem.appendChild(document.createTextNode(globalSearchInput.value.trim()));
+
+            const removeBtn = document.createElement('button');
+            removeBtn.classList.add('remove-filter-btn');
+            removeBtn.dataset.filterType = 'globalSearch';
+            removeBtn.textContent = '✕';
+            removeBtn.addEventListener('click', () => {
+                globalSearchInput.value = '';
+                applyFiltersAndRender();
+            });
+
+            searchItem.appendChild(removeBtn);
             selectedFiltersContainer.appendChild(searchItem);
         }
 
-        if (filtersApplied || globalSearchInput.value.trim() !== '') {
-            selectedFiltersSection.style.display = 'block';
-        } else {
-            selectedFiltersSection.style.display = 'none';
-        }
+        selectedFiltersSection.style.display = filtersApplied ? 'block' : 'none';
     }
 
-    // Основна функція для застосування фільтрів
     function applyFiltersAndRender() {
         const searchTerm = globalSearchInput.value.toLowerCase();
 
         filteredVacancies = allVacancies.filter(vacancy => {
-            const matchesSearch =
-                vacancy.title.toLowerCase().includes(searchTerm) ||
-                vacancy.description.toLowerCase().includes(searchTerm) ||
-                vacancy.department.toLowerCase().includes(searchTerm) ||
-                vacancy.city.toLowerCase().includes(searchTerm);
+            const matchesSearch = vacancy.title.toLowerCase().includes(searchTerm) ||
+                                  vacancy.description.toLowerCase().includes(searchTerm) ||
+                                  vacancy.department.toLowerCase().includes(searchTerm) ||
+                                  vacancy.city.toLowerCase().includes(searchTerm);
 
             const matchesDepartment = activeFilters.department.length === 0 || activeFilters.department.includes(vacancy.department);
             const matchesLevel = activeFilters.level.length === 0 || activeFilters.level.includes(vacancy.level);
@@ -237,9 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSelectedFiltersDisplay();
     }
 
-    // Обробники для випадаючих списків
     document.querySelectorAll('.filter-dropdown .dropdown-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function () {
+        toggle.addEventListener('click', function() {
             document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
                 if (menu !== this.nextElementSibling) {
                     menu.classList.remove('show');
@@ -251,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Закриття меню при кліку поза ними
     document.addEventListener('click', (event) => {
         if (!event.target.closest('.filter-dropdown') && !event.target.classList.contains('btn-validate')) {
             document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
@@ -261,47 +250,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Кнопки "Застосувати" у фільтрах
     document.querySelectorAll('.btn-validate').forEach(button => {
         button.addEventListener('click', () => {
             const filterType = button.dataset.filterType;
             const parentMenu = button.closest('.dropdown-menu');
             const checkboxes = parentMenu.querySelectorAll(`input[name="${filterType}"]:checked`);
             activeFilters[filterType] = Array.from(checkboxes).map(cb => cb.value);
-
             parentMenu.classList.remove('show');
             parentMenu.closest('.filter-dropdown').querySelector('.dropdown-toggle').classList.remove('active');
-
             applyFiltersAndRender();
         });
     });
 
-    // Відправка форми
     filterForm.addEventListener('submit', (event) => {
         event.preventDefault();
         applyFiltersAndRender();
     });
 
-    // Скидання форми
     filterForm.addEventListener('reset', () => {
         globalSearchInput.value = '';
-        document.querySelectorAll('.checkbox-list input[type="checkbox"]').forEach(checkbox => { checkbox.checked = false; });
-
-        activeFilters.department = [];
-        activeFilters.level = [];
-        activeFilters.education = [];
-        activeFilters.city = [];
-        activeFilters.salary = [];
-
+        document.querySelectorAll('.checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+        Object.keys(activeFilters).forEach(key => activeFilters[key] = []);
         document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
             menu.classList.remove('show');
             menu.closest('.filter-dropdown').querySelector('.dropdown-toggle').classList.remove('active');
         });
-
         applyFiltersAndRender();
     });
 
-    // Глобальний пошук
     globalSearchInput.addEventListener('input', () => {
         updateSelectedFiltersDisplay();
     });
